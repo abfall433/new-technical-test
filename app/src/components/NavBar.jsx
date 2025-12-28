@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { AiOutlineHome } from "react-icons/ai"
+import { AiOutlineHome, AiOutlineProject } from "react-icons/ai"
 
-const MENU = [{ title: "Home", to: "/home", logo: <AiOutlineHome className="h-6 w-6" /> }]
+const MENU = [
+  { title: "Home", to: "/home", logo: <AiOutlineHome className="h-6 w-6" /> },
+  { title: "Projets", to: "/projects", logo: <AiOutlineProject className="h-6 w-6" /> }
+]
 
 const Navbar = () => {
   const [selected, setSelected] = useState(0)
