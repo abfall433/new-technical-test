@@ -138,6 +138,34 @@ class api {
       }
     })
   }
+
+  getProjects() {
+    return this.get("/project")
+  }
+
+  getProject(id) {
+    return this.get(`/project/${id}`)
+  }
+
+  createProject(data) {
+    return this.post("/project", data)
+  }
+
+  deleteProject(id) {
+    return this.delete(`/project/${id}`)
+  }
+
+  getExpenses(projectId) {
+    return this.get(`/project/${projectId}/expenses`)
+  }
+
+  createExpense(projectId, data) {
+    return this.post(`/project/${projectId}/expenses`, data)
+  }
+
+  deleteExpense(projectId, expenseId) {
+    return this.delete(`/project/${projectId}/expenses/${expenseId}`)
+  }
 }
 
 const API = new api()
