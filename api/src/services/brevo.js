@@ -2,11 +2,11 @@ const fetch = require("node-fetch");
 
 const { BREVO_KEY, ENVIRONMENT } = require("../config");
 
-const SENDER_NAME = "Your Name";
-const SENDER_NAME_SMS = "Your Name";
-const SENDER_EMAIL = "Your Email";
+const SENDER_NAME = "Badara";
+const SENDER_NAME_SMS = "Badara";
+const SENDER_EMAIL = "badzof80@gmail.com";
 
-const regexp_exception_staging = /selego\.co/;
+const regexp_exception_staging = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const api = async (path, options = {}) => {
   try {

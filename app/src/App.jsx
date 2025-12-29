@@ -7,6 +7,7 @@ import Auth from "@/scenes/auth"
 import Home from "@/scenes/home"
 
 import Projects from "@/scenes/projects"
+import ProjectDetail from "@/scenes/projects/detail"
 
 import Navbar from "@/components/NavBar"
 import TopBar from "@/components/TopBar"
@@ -31,6 +32,7 @@ export default function App() {
         <Route element={<UserLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/projects" element={<Projects />} />
+          <Route path="/projects/:id" element={<ProjectDetail />} />
         </Route>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

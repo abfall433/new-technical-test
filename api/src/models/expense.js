@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 
 const MODELNAME = "expense";
 const ProjectObject = require('./project');
+const { sendEmail } = require("../services/brevo");
+
 
 const Schema = new mongoose.Schema({
     project_id: { type: mongoose.Schema.Types.ObjectId, ref: "project", required: true },
@@ -30,6 +32,7 @@ Schema.pre('save', async function() {
 Schema.post('save', async function() {
     const project = await ProjectObject.findById(this.project_id);
     if (project) {
+        const oldStatus = project.status;
         project.budget.spent = (project.budget.spent || 0) + this.amount;
         project.budget.remaining = project.budget.total - project.budget.spent;
         
@@ -40,6 +43,28 @@ Schema.post('save', async function() {
         }
         
         await project.save();
+
+        if (oldStatus !== project.status) {
+            const UserObject = require('./user');
+            const user = await UserObject.findById(project.user_id);
+            
+            if (user && user.email) {
+                if (project.status === "warning") {
+                    await sendEmail(
+                        [{ email: user.email, name: user.name }],
+                        " Attention : Budget bientôt épuisé",
+                        `<p>Bonjour ${user.name},</p><p>Votre projet "${project.name}" sera bientot a cours de budget.</p><p>Budget restant : ${project.budget.remaining}€ sur ${project.budget.total}€</p><p>Cordialement</p>`
+                    );
+                } else if (project.status === "out_of_budget") {
+                    await sendEmail(
+                        [{ email: user.email, name: user.name}],
+                        "Budget épuisé",
+                        `<p>Bonjour ${user.name},</p><p>Votre projet "${project.name}" a épuisé son budget.</p><p>Budget total : ${project.budget.total}€<br>Dépensé : ${project.budget.spent}€</p><p>Cordialement</p>`
+                    );
+                }
+            }
+        }
+
     }
 });
 
